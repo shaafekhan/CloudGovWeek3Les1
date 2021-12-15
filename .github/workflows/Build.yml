@@ -3,8 +3,6 @@ name: Build a Docker image and Push it to ACR
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
   workflow_dispatch:
 
@@ -16,10 +14,10 @@ jobs:
       
       - uses: azure/docker-login@v1
         with:
-          login-server: yourACRname.azurecr.io
+          login-server: cloudgovweek3les2.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
       - run: |
-          docker build . -t yourACRname.azurecr.io/appdb:${{ github.sha }}
-          docker push yourACRname.azurecr.io/appdb:${{ github.sha }}
+          docker build . -t cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
+          docker push cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
