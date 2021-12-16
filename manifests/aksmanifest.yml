@@ -17,7 +17,7 @@ spec:
         "kubernetes.io/os": linux
       containers:
       - name: cloud-gov-w3l1
-        image: cloudgovweek3les2.azurecr.io/flasktestapp
+        image: cloudgovweek3les2.azurecr.io/flasktestapp:latest
         ports:
           - containerPort: 80
         resources:
