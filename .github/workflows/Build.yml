@@ -33,10 +33,12 @@ jobs:
           container-registry-url: cloudgovweek3les2.azurecr.io
           container-registry-username: ${{ secrets.ACR_USERNAME }}
           container-registry-password: ${{ secrets.ACR_PASSWORD }}
-  
+          secret-name: cloudgovsecret
       - uses: Azure/k8s-deploy@v1.4
         with:
           manifests: |
             manifests/aksmanifest.yml
           images: |
             cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
+          imagepullsecrets: |
+            cloudgovsecret
