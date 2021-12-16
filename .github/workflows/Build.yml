@@ -21,22 +21,22 @@ jobs:
       - run: |
           docker build . -t cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
           docker push cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
-    # Set the target AKS cluster.
-    - uses: Azure/aks-set-context@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        cluster-name: aksCluster1
-        resource-group: SK-RP-W3L1
+      # Set the target AKS cluster.
+      - uses: Azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: aksCluster1
+          resource-group: SK-RP-W3L1
 
-    - uses: Azure/k8s-create-secret@v1
-      with:
-        container-registry-url: cloudgovweek3les2.azurecr.io
-        container-registry-username: ${{ secrets.ACR_USERNAME }}
-        container-registry-password: ${{ secrets.ACR_PASSWORD }}
-
-    - uses: Azure/k8s-deploy@v1.4
-      with:
-        manifests: |
-          manifests/aksmanifest.yml
-        images: |
-          cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
+      - uses: Azure/k8s-create-secret@v1
+        with:
+          container-registry-url: cloudgovweek3les2.azurecr.io
+          container-registry-username: ${{ secrets.ACR_USERNAME }}
+          container-registry-password: ${{ secrets.ACR_PASSWORD }}
+  
+      - uses: Azure/k8s-deploy@v1.4
+        with:
+          manifests: |
+            manifests/aksmanifest.yml
+          images: |
+            cloudgovweek3les2.azurecr.io/flasktestapp:${{ github.sha }}
