@@ -8,28 +8,23 @@ spec:
   selector:
     matchLabels:
       app: cloud-gov-w3l1
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-  minReadySeconds: 5
   template:
     metadata:
       labels:
         app: cloud-gov-w3l1
     spec:
       nodeSelector:
-        "beta.kubernetes.io/os": linux
+        "kubernetes.io/os": linux
       containers:
       - name: cloud-gov-w3l1
         image: cloudgovweek3les2.azurecr.io/flasktestapp
-        ports:
-        - containerPort: 80
         resources:
           requests:
-            cpu: 250m
+            cpu: 100m
+            memory: 128Mi
           limits:
-            cpu: 500m
+            cpu: 250m
+            memory: 256Mi
 ---
 apiVersion: v1
 kind: Service
