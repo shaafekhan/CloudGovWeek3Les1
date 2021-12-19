@@ -22,7 +22,7 @@ jobs:
       - uses: Azure/aks-set-context@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: aksCluster1
+          cluster-name: cloudGovCluster
           resource-group: SK-RP-W3L1
 
       - uses: Azure/k8s-create-secret@v1
