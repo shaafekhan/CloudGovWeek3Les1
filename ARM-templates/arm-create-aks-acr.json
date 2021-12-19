@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        { // Kubernetes Cluster
+        "name": "cloudGovCluster",
+        "type": "Microsoft.ContainerService/managedClusters",
+        "apiVersion": "2021-05-01",
+        "location": "[resourceGroup().location]",
+        "identity": {
+            "type": "SystemAssigned"
+            },
+        "properties": {
+            "kubernetesVersion": "1.22.1",
+            "dnsPrefix": "cloudgovweek3les1",
+        
+            "agentPoolProfiles": [
+                {
+                    "name": "agentpool",
+                    "count": 1,
+                    "vmSize": "Standard_B2s",
+                    "osType": "Linux",
+                    "storageProfile": "ManagedDisks",
+                    "mode": "System"
+                }
+            ],
+            "linuxProfile": {
+                "adminUsername": "adminUserName",
+                "ssh": {
+                    "publicKeys": [
+                        {
+                            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAkQOfwuNf0BZKK9w5VQDundXukLsj9HmwEeBSpuPTTKfEGnCRGwKpA0L6BFNHm+n9buPi6NzO099rUJ8iX0W8B+jUrheQS1UzhrsuEAKKIsF2R6PySsDnhfg+gydKsSsYd+Lln3UzCkH3p3dfICin6BFPY0ipV43HeOb1f8tPzPMEbmjSVGVVifyy9/OsUNzugAEFPqrqPOhCoNaUZfMwpSiOPetTOUutDQehcjvmNiIMEsQaXkG0gZysAagPZqNZ6SecWXqByLs/GwHkQjIqCKTrpupEEgv0R/IanLFf1niZOTHjEJ1I4f0ogb/aPicxTG4aSbnR07Q09GHqjtUE3Q== rsa-key-20211214"
+                        }
+                    ]
+                }
+            },
+            "servicePrincipalProfile": {
+                "clientId" : "msi"
+            }
+        }
+    },
+    { // Container Registry
+        "name": "CloudGovWeek3Les2",
+        "type": "Microsoft.ContainerRegistry/registries",
+        "apiVersion": "2019-05-01",
+        "location": "[resourceGroup().location]",
+        "sku": {
+            "name": "Standard"
+        },
+        "properties": {
+            "adminUserEnabled": true
+        }
+    }],
+    "outputs": {
+        "acr-admin-username": {
+            "type": "string",
+            "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', 'CloudGovWeek3Les2'), '2017-10-01').username]"
+        },
+        "acr-admin-password": {
+            "type": "string",
+            "value": "[listCredentials(resourceId('Microsoft.ContainerRegistry/registries', 'CloudGovWeek3Les2'), '2017-10-01').passwords[0].value]"
+        }
+    }
+}
